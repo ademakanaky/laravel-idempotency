@@ -412,6 +412,10 @@ vendor/bin/phpunit
 
 ------------------------------------------------------------------------
 
+# TO-DO:
+- Add Idempotency Expiration Cleanup Command – this is important so the idempotency_keys table does not grow indefinitely.
+- Still thinking about what else to add...
+
 # License
 
 MIT License
