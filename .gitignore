@@ -1,0 +1,7 @@
+/vendor
+/node_modules
+/.idea
+/.vscode
+/.phpunit.result.cache
+/tests/temp.sqlite
+composer.lock

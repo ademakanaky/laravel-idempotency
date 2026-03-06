@@ -1,0 +1,42 @@
+{
+  "name": "ademakanaky/laravel-enterprise-idempotency",
+  "description": "Enterprise-grade, concurrency-safe idempotency middleware for Laravel APIs.",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Oluwasegun Ibidokun",
+      "email": "segunibidokun@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Ademakanaky\\EnterpriseIdempotency\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ademakanaky\\EnterpriseIdempotency\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Ademakanaky\\EnterpriseIdempotency\\IdempotencyServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "php": "^8.3",
+    "illuminate/support": "^10.0|^11.0",
+    "illuminate/http": "^10.0|^11.0",
+    "illuminate/database": "^10.0|^11.0",
+    "illuminate/cache": "^10.0|^11.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0",
+    "phpunit/phpunit": "^9.6"
+  },
+  "minimum-stability": "stable"
+}
