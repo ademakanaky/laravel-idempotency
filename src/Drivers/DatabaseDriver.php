@@ -2,6 +2,7 @@
 
 namespace Ademakanaky\EnterpriseIdempotency\Drivers;
 
+use Ademakanaky\EnterpriseIdempotency\Concerns\InteractsWithIdempotencyRequests;
 use Ademakanaky\EnterpriseIdempotency\Contracts\IdempotencyDriver;
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -10,10 +11,12 @@ use Illuminate\Http\Response;
 
 class DatabaseDriver implements IdempotencyDriver
 {
+    use InteractsWithIdempotencyRequests;
+
     public function handle(Request $request, string $key, Closure $next): Response|JsonResponse
     {
         $modelClass = config('idempotency.idempotency_model');
-        $userIdentifier = (string) optional($request->user())->getAuthIdentifier() ?: $request->ip();
+        $userIdentifier = $this->resolveUser($request);
 
         $route = $request->route()?->getName() ?? $request->path();
         $hash = $this->hash($request);
@@ -74,14 +77,5 @@ class DatabaseDriver implements IdempotencyDriver
         }
 
         return $response;
-    }
-
-    protected function hash(Request $request): string
-    {
-        return hash('sha256', implode('|', [
-            $request->method(),
-            $request->path(),
-            $request->getContent(),
-        ]));
     }
 }

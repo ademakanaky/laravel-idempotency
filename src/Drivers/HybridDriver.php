@@ -2,6 +2,7 @@
 
 namespace Ademakanaky\EnterpriseIdempotency\Drivers;
 
+use Ademakanaky\EnterpriseIdempotency\Concerns\InteractsWithIdempotencyRequests;
 use Ademakanaky\EnterpriseIdempotency\Contracts\IdempotencyDriver;
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class HybridDriver implements IdempotencyDriver
 {
+    use InteractsWithIdempotencyRequests;
+
     public function handle(Request $request, string $key, Closure $next): Response|JsonResponse
     {
         $lock = null;
@@ -82,22 +85,6 @@ class HybridDriver implements IdempotencyDriver
         } finally {
             optional($lock)->release();
         }
-    }
-
-    protected function resolveUser(Request $request): ?string
-    {
-        $resolver = config('idempotency.user_resolver');
-
-        if (is_callable($resolver)) {
-            return (string) $resolver($request);
-        }
-
-        return (string) optional($request->user())->getAuthIdentifier() ?: $request->ip();
-    }
-
-    protected function hash(Request $request): string
-    {
-        return hash('sha256', implode('|', [$request->method(), $request->path(), $request->getContent(),]));
     }
 
     protected function replay($record): Response

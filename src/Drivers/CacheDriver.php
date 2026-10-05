@@ -2,6 +2,7 @@
 
 namespace Ademakanaky\EnterpriseIdempotency\Drivers;
 
+use Ademakanaky\EnterpriseIdempotency\Concerns\InteractsWithIdempotencyRequests;
 use Ademakanaky\EnterpriseIdempotency\Contracts\IdempotencyDriver;
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -11,6 +12,7 @@ use Illuminate\Http\Response;
 
 class CacheDriver implements IdempotencyDriver
 {
+    use InteractsWithIdempotencyRequests;
 
     public function handle(Request $request, string $key, Closure $next): Response|JsonResponse
     {
@@ -54,14 +56,5 @@ class CacheDriver implements IdempotencyDriver
         }
 
         return $response;
-    }
-
-    protected function hash(Request $request): string
-    {
-        return hash('sha256', implode('|', [
-            $request->method(),
-            $request->path(),
-            $request->getContent(),
-        ]));
     }
 }
